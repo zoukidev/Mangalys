@@ -23,11 +23,10 @@ namespace MangalysClient
 
             Client.Start("127.0.0.1", 3000);
 
-            Client.Send(new BasicInfoMessage("is Demo"));
+            //Client.Send(new BasicInfoMessage("is Demo"));
 
-            Thread.Sleep(200);
-
-            Client.SocketInstance.Send(MangalysProtocol.Message.Serialize(new BasicAnotherInfoMessage("Another demo")));
+            // Thread.Sleep(200);
+            // Client.Send(new BasicAnotherInfoMessage("Another demo"));
         }
 
         private void OnStatusUpdate(string status)

@@ -55,6 +55,7 @@
     <Compile Include="FormDispatcher.cs" />
     <Compile Include="Handlers\Connection.cs" />
     <Compile Include="Managers\ClientsManager.cs" />
+    <Compile Include="Messages\BasicInfoMessage.cs" />
     <Compile Include="Network\Handle.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

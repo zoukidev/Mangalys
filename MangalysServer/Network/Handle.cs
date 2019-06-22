@@ -1,5 +1,4 @@
 ﻿using MangalysProtocol;
-using MangalysProtocol.Messages;
 using MangalysProtocol.Network;
 using System;
 using System.Collections.Generic;
@@ -23,10 +22,12 @@ namespace MangalysServer.Network
                 Methods.AddRange(types[i].GetMethods());
             }
 
-            foreach (Message msg in Messages)
-            {
-                Console.WriteLine($"Message: {msg.GetType().FullName}");
-            }
+            //Console.WriteLine("Messages" + Environment.NewLine);
+
+            //foreach (var msg in types)
+            //{
+            //    Console.WriteLine($"Message: {msg.GetType().Name}");
+            //}
         }
 
         public static void Process(Client client, byte[] buffer) {

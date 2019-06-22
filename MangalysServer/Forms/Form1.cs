@@ -18,13 +18,13 @@ namespace MangalysServer
         {
             FormDispatcher.RichTextBox = richTextBox1;
 
-            Network.Handle.Setup();
-
             Server.OnStatusUpdate += OnStatusUpdate;
             Server.OnAccept += OnAccept;
             Server.OnReceive += OnReceive;
 
             Server.Start("127.0.0.1", 3000);
+
+            Network.Handle.Setup();
         }
 
         private void OnStatusUpdate(string status)
