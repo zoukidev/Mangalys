@@ -1,8 +1,6 @@
 ﻿using MangalysProtocol.Network;
 using System;
 using System.Windows.Forms;
-using System.Threading;
-using MangalysClient.Messages;
 
 namespace MangalysClient
 {

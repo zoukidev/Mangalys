@@ -57,7 +57,7 @@ namespace MangalysProtocol.Network
 
         public void Send(Message message)
         {
-            SocketInstance.Send(Message.Serialize(message));
+            SocketInstance.Send(Binary.Serialize(message));
         }
     }
 }

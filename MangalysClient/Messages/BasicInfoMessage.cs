@@ -1,17 +1,13 @@
-﻿using MangalysProtocol;
-using System;
-
-namespace MangalysClient.Messages
+﻿[System.Serializable]
+public class BasicInfoMessage : MangalysClient.Messages.Message
 {
-    [Serializable]
-    public class BasicInfoMessage : Message
-    {
-        public new int Protocol = 1;
-        public string Name { get; set; }
+    public new int Protocol = 1;
+    public string Name { get; set; }
 
-        public BasicInfoMessage(string name)
-        {
-            Name = name;
-        }
+    public BasicInfoMessage() { }
+
+    public BasicInfoMessage(string name)
+    {
+        Name = name;
     }
 }

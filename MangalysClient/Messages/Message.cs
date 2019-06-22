@@ -1,4 +1,4 @@
-﻿namespace MangalysServer.Messages
+﻿namespace MangalysClient.Messages
 {
     [System.Serializable]
     public class Message : MangalysProtocol.Message
