@@ -1,5 +1,5 @@
-﻿using MangalysProtocol;
-using MangalysProtocol.Network;
+﻿using MangalysProtocol.Network;
+using MangalysServer.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,27 +22,23 @@ namespace MangalysServer.Network
             {
                 Methods.AddRange(types[i].GetMethods());
             }
+
+            foreach (Message message in Messages)
+            {
+                Console.WriteLine($"Method loaded: {message.GetType().Name}");
+            }
         }
 
         public static void Process(Client client, byte[] buffer) {
 
-            Message msg = Message.Deserialize(buffer);
+            Message msg = (Message)Message.Deserialize(buffer);
             var message = Messages.FirstOrDefault(x => x.Protocol == msg.Protocol);
 
-            if (message == null)
+            if (message != null)
             {
-                Console.WriteLine("[RCV] {0}.", msg.Protocol);
-            }
-            else
-            {
-                Console.WriteLine($"Search Message: {message.Protocol}");
                 var method = Methods.FirstOrDefault(x => x.Name == message.GetType().Name);
 
-                if (method == null)
-                {
-                    Console.WriteLine("[RCV] {0}.", msg.Protocol);
-                }
-                else
+                if (method != null)
                 {
                     Console.WriteLine("[RCV] {0}.", message.GetType().Name);
                     method.Invoke(Activator.CreateInstance(method.DeclaringType), new object[] { client, message });
