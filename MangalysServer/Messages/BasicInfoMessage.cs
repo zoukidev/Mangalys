@@ -1,5 +1,4 @@
-﻿using MangalysProtocol;
-using System;
+﻿using System;
 
 namespace MangalysServer.Messages
 {
