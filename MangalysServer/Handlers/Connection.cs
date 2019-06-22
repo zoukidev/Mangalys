@@ -7,12 +7,12 @@ namespace MangalysServer.Handlers
     {
         public void BasicInfoMessage(Client client, BasicInfoMessage message)
         {
-            FormDispatcher.AppendLog(message.GetType().Name + " | " + message.Name);
+            FormDispatcher.AppendLog("OK: " + message.GetType().Name + " | " + message.Name);
         }
 
         public void BasicAnotherInfoMessage(Client client, BasicAnotherInfoMessage message)
         {
-            FormDispatcher.AppendLog(message.GetType().Name + " | " + message.Name);
+            FormDispatcher.AppendLog("OK: " + message.GetType().Name + " | " + message.Name);
         }
     }
 }
