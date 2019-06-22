@@ -1,7 +1,7 @@
 ﻿using MangalysProtocol;
 using System;
 
-namespace MangalysProtocol.Messages
+namespace MangalysClient.Messages
 {
     [Serializable]
     public class BasicInfoMessage : Message

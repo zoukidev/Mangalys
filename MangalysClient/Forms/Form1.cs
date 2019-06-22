@@ -1,14 +1,15 @@
 ﻿using MangalysProtocol.Network;
-using MangalysProtocol.Messages;
 using System;
 using System.Windows.Forms;
 using System.Threading;
+using MangalysClient.Messages;
 
 namespace MangalysClient
 {
     public partial class Form1 : Form
     {
         ClientListener Client = new ClientListener();
+
         public Form1()
         {
             InitializeComponent();
@@ -24,10 +25,6 @@ namespace MangalysClient
             Client.Start("127.0.0.1", 3000);
 
             Client.Send(new BasicInfoMessage("is Demo"));
-
-            Thread.Sleep(200);
-
-            Client.Send(new BasicAnotherInfoMessage("Another demo"));
         }
 
         private void OnStatusUpdate(string status)

@@ -21,13 +21,13 @@ namespace MangalysProtocol
             return ms.ToArray();
         }
 
-        public static Message Deserialize(byte[] arrBytes)
+        public static Object Deserialize(byte[] arrBytes)
         {
             MemoryStream memStream = new MemoryStream();
             BinaryFormatter binForm = new BinaryFormatter();
             memStream.Write(arrBytes, 0, arrBytes.Length);
             memStream.Seek(0, SeekOrigin.Begin);
-            Message obj = (Message)binForm.Deserialize(memStream);
+            Object obj = binForm.Deserialize(memStream);
 
             return obj;
         }

@@ -14,46 +14,41 @@ namespace MangalysServer.Network
 
         public static void Setup()
         {
-            IEnumerable<string> Messagess = GetClasses("MangalysServer.Messages");
+            var types = Assembly.GetExecutingAssembly().GetTypes();
 
-            foreach (var message in Messagess)
+            Messages.AddRange(types.Where(x => x.IsSubclassOf(typeof(Message)) && x.GetConstructor(Type.EmptyTypes) != null).Select(x => (Message)Activator.CreateInstance(x)));
+
+            for (int i = 0; i < types.Length; i++)
             {
-                Console.WriteLine(message.GetType().Name);
+                Methods.AddRange(types[i].GetMethods());
             }
         }
 
         public static void Process(Client client, byte[] buffer) {
 
-            Message message = Message.Deserialize(buffer);
-            var messageAvailable = Messages.FirstOrDefault(x => x.GetType().Name == message.GetType().Name);
+            Message msg = (Message)Message.Deserialize(buffer);
+            var message = Messages.FirstOrDefault(x => x.Protocol == msg.Protocol);
 
-            if (messageAvailable == null)
+            if (message == null)
             {
-                Console.WriteLine("[RCV][Message] {0}.", message.Protocol);
+                Console.WriteLine("[RCV] {0}.", msg.Protocol);
             }
             else
             {
-                Console.WriteLine($"Search Message: {messageAvailable.Protocol}");
-                var method = Methods.FirstOrDefault(x => x.Name == messageAvailable.GetType().Name);
+                Console.WriteLine($"Search Message: {message.Protocol}");
+                var method = Methods.FirstOrDefault(x => x.Name == message.GetType().Name);
 
                 if (method == null)
                 {
-                    Console.WriteLine("[RCV][Method] {0}.", method.Name);
+                    Console.WriteLine("[RCV] {0}.", msg.Protocol);
                 }
                 else
                 {
                     Console.WriteLine("[RCV] {0}.", message.GetType().Name);
-                    method.Invoke(Activator.CreateInstance(method.DeclaringType), new object[] { client, messageAvailable });
+                    method.Invoke(Activator.CreateInstance(method.DeclaringType), new object[] { client, message });
                 }
             }
         }
 
-        static IEnumerable<string> GetClasses(string nameSpace)
-        {
-            Assembly asm = Assembly.GetExecutingAssembly();
-            return asm.GetTypes()
-                .Where(type => type.Namespace == nameSpace)
-                .Select(type => type.Name);
-        }
     }
 }

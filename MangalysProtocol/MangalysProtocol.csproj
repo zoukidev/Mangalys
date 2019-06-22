@@ -42,8 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Message.cs" />
-    <Compile Include="Messages\BasicAnotherInfoMessage.cs" />
-    <Compile Include="Messages\BasicInfoMessage.cs" />
     <Compile Include="Network\BaseListener.cs" />
     <Compile Include="Network\Client.cs" />
     <Compile Include="Network\ClientListener.cs" />
