@@ -24,7 +24,7 @@ namespace MangalysClient
 
             Client.Start("127.0.0.1", 3000);
 
-            //Client.Send(new BasicInfoMessage("is Demo"));
+            Client.Send(new BasicInfoMessage("is Demo"));
         }
 
         private void OnStatusUpdate(string status)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MangalysProtocol.Network;
+using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -25,6 +26,8 @@ namespace MangalysProtocol
         {
             MemoryStream memStream = new MemoryStream();
             BinaryFormatter binForm = new BinaryFormatter();
+            //binForm.Binder = new PreMergeToMergedDeserializationBinder();
+
             memStream.Write(arrBytes, 0, arrBytes.Length);
             memStream.Seek(0, SeekOrigin.Begin);
             Message obj = (Message)binForm.Deserialize(memStream);
