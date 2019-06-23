@@ -1,9 +1,6 @@
-﻿using MangalysProtocol;
-using System;
-
-namespace MangalysProtocol.Messages
+﻿namespace MangalysProtocol.Messages
 {
-    [Serializable()]
+    [System.Serializable()]
     public class BasicInfoMessage : Message
     {
         public new int Protocol = 1;

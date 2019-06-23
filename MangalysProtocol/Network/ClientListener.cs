@@ -48,7 +48,7 @@ namespace MangalysProtocol.Network
             {
                 //string msg = Encoding.ASCII.GetString(Buffer);
 
-                //OnReceive(Buffer);
+                OnReceive(Buffer);
                 Buffer = new byte[2048];
 
                 SocketInstance.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, new AsyncCallback(Receive), SocketInstance);
@@ -57,7 +57,9 @@ namespace MangalysProtocol.Network
 
         public void Send(Message message)
         {
-            SocketInstance.Send(Binary.Serialize(message));
+            var msg = Binary.Serialize(message);
+            Console.WriteLine("Send " + msg.Length + " bytes");
+            SocketInstance.Send(msg);
         }
     }
 }

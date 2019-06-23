@@ -8,6 +8,6 @@ public class BasicInfoMessage : MangalysServer.Messages.Message
 
     public BasicInfoMessage(string name)
     {
-        this.SpecialName = name;
+        SpecialName = name;
     }
 }

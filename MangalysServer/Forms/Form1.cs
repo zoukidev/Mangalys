@@ -17,6 +17,7 @@ namespace MangalysServer
         private void Form1_Load(object sender, EventArgs e)
         {
             FormDispatcher.RichTextBox = richTextBox1;
+            FormDispatcher.PictureBox = pictureBox1;
 
             Server.OnStatusUpdate += OnStatusUpdate;
             Server.OnAccept += OnAccept;

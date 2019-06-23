@@ -6,6 +6,7 @@ namespace MangalysServer
     public class FormDispatcher
     {
         public static RichTextBox RichTextBox { get; set; }
+        public static PictureBox PictureBox { get; set; }
 
         public static void AppendLog(string text)
         {

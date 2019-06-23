@@ -23,12 +23,18 @@ namespace MangalysServer.Network
             {
                 Methods.AddRange(types[i].GetMethods());
             }
+
+            foreach (MangalysServer.Messages.Message message in Messages)
+            {
+                Console.WriteLine($"Message Loaded: {message.GetType().Name}");
+            }
         }
 
         public static void Process(Client client, byte[] buffer) {
-
+            Console.WriteLine("[RCV] Buffer Length {0}.", buffer.Length);
             MangalysProtocol.Message msg = (MangalysProtocol.Message)Binary.Deserialize(buffer);
-            var message = Messages.FirstOrDefault(x => x.Protocol == msg.Protocol);
+
+            var message = Messages.FirstOrDefault(x => x.GetType().Name == msg.GetType().Name);
 
             if (message == null)
             {
@@ -36,7 +42,6 @@ namespace MangalysServer.Network
             }
             else
             {
-                Console.WriteLine($"Search Message: {message.Protocol}");
                 var method = Methods.FirstOrDefault(x => x.Name == message.GetType().Name);
 
                 if (method == null)
@@ -45,9 +50,6 @@ namespace MangalysServer.Network
                 }
                 else
                 {
-                    //Console.WriteLine($"Search Method: {method.GetType().Name}");
-                    //message.Deserialize(reader);
-                    //Console.WriteLine("[RCV] {0}.", message.GetType().Name);
                     method.Invoke(Activator.CreateInstance(method.DeclaringType), new object[] { client, message });
                 }
             }

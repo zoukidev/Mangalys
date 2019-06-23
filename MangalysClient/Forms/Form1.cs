@@ -1,5 +1,9 @@
-﻿using MangalysProtocol.Network;
+﻿using MangalysProtocol.Messages;
+using MangalysProtocol.Network;
 using System;
+using System.Drawing;
+using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MangalysClient
@@ -22,9 +26,9 @@ namespace MangalysClient
 
             Client.Start("127.0.0.1", 3000);
 
-            var msg = new MangalysProtocol.Messages.BasicInfoMessage("is Demo");
-            msg.SpecialName = "Retest";
-            Client.Send(msg);
+            Client.Send(new MangalysProtocol.Messages.BasicInfoMessage("DemoMaboule"));
+
+            pictureBox1.Image = TakeScreenshot();
         }
 
         private void OnStatusUpdate(string status)
@@ -35,6 +39,47 @@ namespace MangalysClient
         private void OnReceive(byte[] buffer)
         {
             FormDispatcher.AppendLog($"on receive {buffer.Length} bytes" + Environment.NewLine);
+        }
+
+        private Bitmap TakeScreenshot()
+        {
+
+            var bmpScreenshot = new Bitmap(
+                Screen.PrimaryScreen.Bounds.Width / 2,
+                Screen.PrimaryScreen.Bounds.Height / 2,
+                System.Drawing.Imaging.PixelFormat.Format32bppArgb
+            );
+
+            using (var gfxScreenshot = Graphics.FromImage(bmpScreenshot))
+            {
+                gfxScreenshot.CopyFromScreen(
+                    Screen.PrimaryScreen.Bounds.X,
+                    Screen.PrimaryScreen.Bounds.Y,
+                    0,
+                    0,
+                    Screen.PrimaryScreen.Bounds.Size,
+                    CopyPixelOperation.SourceCopy
+                );
+            }
+
+            return bmpScreenshot;
+        }
+
+        public byte[] ImageToByteArray(System.Drawing.Image imageIn)
+        {
+            ImageConverter converter = new ImageConverter();
+            return (byte[])converter.ConvertTo(imageIn, typeof(byte[]));
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            pictureBox1.Image = TakeScreenshot();
+
+            Thread.Sleep(200);
+
+            var image = ImageToByteArray(pictureBox1.Image);
+            Console.WriteLine("image length: "+image.Length);
+            Client.Send(new MangalysProtocol.Messages.BasicVideoMessage(image));
         }
     }
 }

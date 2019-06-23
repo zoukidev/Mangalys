@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace MangalysProtocol
@@ -42,7 +43,7 @@ namespace MangalysProtocol
         {
             MemoryStream memStream = new MemoryStream();
             BinaryFormatter binForm = new BinaryFormatter();
-            binForm.Binder = new AllowAllAssemblyVersionsDeserializationBinder();
+            //binForm.Binder = new AllowAllAssemblyVersionsDeserializationBinder();
 
             memStream.Write(arrBytes, 0, arrBytes.Length);
             memStream.Seek(0, SeekOrigin.Begin);

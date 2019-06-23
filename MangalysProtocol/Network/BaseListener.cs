@@ -9,7 +9,7 @@ namespace MangalysProtocol.Network
 {
     public class BaseListener
     {
-        public byte[] Buffer = new byte[2048];
+        public byte[] Buffer = new byte[30000];
         public Socket SocketInstance;
 
         public static IPEndPoint CreateIPEndPoint(string endPoint)
