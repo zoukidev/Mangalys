@@ -22,7 +22,9 @@ namespace MangalysClient
 
             Client.Start("127.0.0.1", 3000);
 
-            Client.Send(new BasicInfoMessage("is Demo"));
+            var msg = new MangalysProtocol.Messages.BasicInfoMessage("is Demo");
+            msg.SpecialName = "Retest";
+            Client.Send(msg);
         }
 
         private void OnStatusUpdate(string status)

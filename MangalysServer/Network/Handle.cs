@@ -27,7 +27,7 @@ namespace MangalysServer.Network
 
         public static void Process(Client client, byte[] buffer) {
 
-            MangalysServer.Messages.Message msg = (MangalysServer.Messages.Message)Binary.Deserialize(buffer);
+            MangalysProtocol.Message msg = (MangalysProtocol.Message)Binary.Deserialize(buffer);
             var message = Messages.FirstOrDefault(x => x.Protocol == msg.Protocol);
 
             if (message == null)

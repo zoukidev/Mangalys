@@ -1,5 +1,4 @@
 ﻿using MangalysProtocol.Network;
-using MangalysServer.Messages;
 
 namespace MangalysServer.Handlers
 {
@@ -7,7 +6,7 @@ namespace MangalysServer.Handlers
     {
         public void BasicInfoMessage(Client client, BasicInfoMessage message)
         {
-            FormDispatcher.AppendLog("OK: " + message.GetType().Name + " | " + message.Name);
+            FormDispatcher.AppendLog("BasicInfoMessage:" + message.SpecialName);
         }
     }
 }
