@@ -1,10 +1,7 @@
 ﻿using MangalysProtocol;
-using MangalysProtocol.Network;
-using MangalysServer.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
 using System.Reflection;
 
 namespace MangalysServer.Network
@@ -31,7 +28,7 @@ namespace MangalysServer.Network
             }
         }
 
-        public static void Process(Socket socket, byte[] buffer) {
+        public static void Process(Network.Client client, byte[] buffer) {
             var msg = (MangalysProtocol.Message)Binary.Deserialize(buffer);
 
             var message = Messages.FirstOrDefault(x => x.GetType().Name == msg.GetType().Name);
@@ -53,7 +50,7 @@ namespace MangalysServer.Network
                 else
                 {
 
-                    method.Invoke(Activator.CreateInstance(method.DeclaringType), new object[] { socket, msg });
+                    method.Invoke(Activator.CreateInstance(method.DeclaringType), new object[] { client, msg });
                 }
             }
         }

@@ -1,5 +1,7 @@
-﻿using MangalysProtocol.Network;
+﻿using MangalysProtocol.Enums;
+using MangalysProtocol.Network;
 using MangalysServer.Forms;
+using MangalysServer.Managers;
 using System;
 using System.Net.Sockets;
 using System.Threading;
@@ -16,6 +18,7 @@ namespace MangalysServer
             InitializeComponent();
         }
 
+        #region "Form"
         private void Form1_Load(object sender, EventArgs e)
         {
             FormDispatcher.RichTextBox = richTextBox1;
@@ -27,10 +30,19 @@ namespace MangalysServer
             t.Start();
         }
 
+        private void ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Form form = new FakeMessageBoxForm();
+            form.Show();
+        }
+        #endregion
+
+        #region "Networking"
         private void StartServer()
         {
             Server.OnStatusUpdate += OnStatusUpdate;
-            Server.OnAccept += OnAccept;
+            Server.OnNewClient += OnNewClient;
+            Server.OnClientDisconnect += OnClientDisconnect;
             Server.OnReceive += OnReceive;
 
             Server.Start("127.0.0.1", 3000);
@@ -38,35 +50,34 @@ namespace MangalysServer
             Network.Handle.Setup();
         }
 
-        private void OnStatusUpdate(string status)
+        private void OnStatusUpdate(ServerStatusEnums status)
         {
             FormDispatcher.AppendLog(status + Environment.NewLine);
         }
 
-        private void OnAccept(Socket socket)
+        private void OnNewClient(Socket socket)
         {
-            FormDispatcher.AppendLog("on new client accepted" + Environment.NewLine);
+            ClientsManager.Clients.Add(new Network.Client(socket));
+        }
+
+        private void OnClientDisconnect(Socket socket)
+        {
+            Network.Client client = ClientsManager.Find(socket);
+            
+            if (client != null)
+            {
+                ClientsManager.Clients.Remove(client);
+
+                FormDispatcher.RefreshList(ClientsManager.Clients.ToArray());
+                FormDispatcher.AppendLog("Un Utilisateur se déconnecte" + Environment.NewLine);
+            }
         }
 
         private void OnReceive(Socket socket, byte[] buffer)
         {
-            Network.Handle.Process(socket, buffer);
+            Network.Client client = ClientsManager.Find(socket);
+            Network.Handle.Process(client, buffer);
         }
-
-        private void TreeView1_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-
-        }
-
-        private void ContextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
-
-        private void ToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            Form form = new FakeMessageBoxForm();
-            form.Show();
-        }
+        #endregion
     }
 }

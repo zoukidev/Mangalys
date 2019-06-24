@@ -55,7 +55,6 @@
             treeNode1});
             this.treeView1.Size = new System.Drawing.Size(287, 426);
             this.treeView1.TabIndex = 2;
-            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView1_AfterSelect);
             // 
             // contextMenuStrip1
             // 
@@ -64,7 +63,6 @@
             this.toolStripMenuItem1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(241, 67);
-            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStrip1_Opening);
             // 
             // toolStripMenuItem1
             // 

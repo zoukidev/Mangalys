@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace MangalysProtocol.Network
 {
-    public class BaseListener
+    public class Base
     {
-        public byte[] Buffer = new byte[70000];
+        public byte[] Buffer = new byte[1024];
         public Socket SocketInstance;
 
         public static IPEndPoint CreateIPEndPoint(string endPoint)
@@ -31,6 +29,11 @@ namespace MangalysProtocol.Network
             }
 
             return new IPEndPoint(ip, port);
+        }
+
+        public void Send(Message message)
+        {
+            SocketInstance.Send(Binary.Serialize(message));
         }
     }
 }

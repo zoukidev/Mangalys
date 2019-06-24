@@ -42,13 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binary.cs" />
+    <Compile Include="Enums\ClientStatusEnums.cs" />
+    <Compile Include="Enums\ServerStatusEnums.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Messages\BasicInfoMessage.cs" />
-    <Compile Include="Network\BaseListener.cs" />
-    <Compile Include="Network\Client.cs" />
+    <Compile Include="Network\Base.cs" />
     <Compile Include="Network\ClientListener.cs" />
-    <Compile Include="Network\PreMergeToMergedDeserializationBinder.cs" />
-    <Compile Include="Network\Server.cs" />
     <Compile Include="Network\ServerListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

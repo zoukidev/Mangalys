@@ -64,6 +64,7 @@
     <Compile Include="Messages\BasicInfoMessage.cs" />
     <Compile Include="Messages\BasicVideoMessage.cs" />
     <Compile Include="Messages\Message.cs" />
+    <Compile Include="Network\Client.cs" />
     <Compile Include="Network\Handle.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

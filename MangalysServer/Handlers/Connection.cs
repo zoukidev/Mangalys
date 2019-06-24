@@ -1,17 +1,15 @@
-﻿using MangalysProtocol.Messages;
-using MangalysProtocol.Network;
-using System;
-using System.Drawing;
-using System.IO;
-using System.Net.Sockets;
+﻿using MangalysServer.Managers;
 
 namespace MangalysServer.Handlers
 {
     public class Connection
     {
-        public void BasicInfoMessage(Socket socket, MangalysProtocol.Messages.BasicInfoMessage message)
+        public void BasicInfoMessage(Network.Client client, MangalysProtocol.Messages.BasicInfoMessage message)
         {
-            FormDispatcher.AddClient(message.MachineName, message.UserName);
+            client.MachineName = message.MachineName;
+            client.UserName = message.UserName;
+
+            FormDispatcher.RefreshList(ClientsManager.Clients.ToArray());
         }
     }
 }

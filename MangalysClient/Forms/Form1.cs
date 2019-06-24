@@ -1,6 +1,9 @@
-﻿using MangalysProtocol.Messages;
+﻿using MangalysClient.Managers.Process;
+using MangalysProtocol.Enums;
+using MangalysProtocol.Messages;
 using MangalysProtocol.Network;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Threading;
@@ -32,15 +35,13 @@ namespace MangalysClient
         {
             Client.OnStatusUpdate += OnStatusUpdate;
             Client.OnReceive += OnReceive;
-
             Client.Start("127.0.0.1", 3000);
 
-            //Thread.Sleep(200);
 
             Client.Send(new MangalysProtocol.Messages.BasicInfoMessage(Environment.MachineName, Environment.UserName));
         }
 
-        private void OnStatusUpdate(string status)
+        private void OnStatusUpdate(ClientStatusEnums status)
         {
             FormDispatcher.AppendLog(status + Environment.NewLine);
         }

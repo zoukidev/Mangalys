@@ -25,6 +25,8 @@ namespace MangalysServer
             }
         }
 
+        
+
         public static void AddClient(string machinename, string username)
         {
             if (TreeView.InvokeRequired)
@@ -39,6 +41,31 @@ namespace MangalysServer
                 TreeView.Nodes[0].Nodes.Add($"{username} ({machinename})");
                 TreeView.Nodes[0].Nodes[0].ContextMenuStrip = ActionCtxMenuStrip;
                 TreeView.EndUpdate();
+            }
+        }
+        public static void ClearClientList()
+        {
+            if (TreeView.InvokeRequired)
+            {
+                TreeView.Invoke((MethodInvoker)delegate ()
+                {
+                    ClearClientList();
+                });
+            }
+            else
+            {
+                TreeView.BeginUpdate();
+                TreeView.Nodes[0].Nodes.Clear();
+                TreeView.EndUpdate();
+            }
+        }
+
+        public static void RefreshList(Network.Client[] clients)
+        {
+            ClearClientList();
+            foreach (Network.Client client in clients)
+            {
+                AddClient(client.MachineName, client.UserName);
             }
         }
     }

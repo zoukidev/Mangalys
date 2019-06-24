@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using MangalysProtocol.Enums;
+using System;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MangalysProtocol.Network
 {
-    public class ClientListener : BaseListener
+    public class ClientListener : Base
     {
-        public delegate void OnStatusUpdateCallback(string status);
+        public delegate void OnStatusUpdateCallback(ClientStatusEnums status);
         public delegate void OnReceiveCallback(byte[] buffer);
 
         public OnStatusUpdateCallback OnStatusUpdate;
@@ -22,12 +17,12 @@ namespace MangalysProtocol.Network
             try
             {
                 SocketInstance = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
                 SocketInstance.BeginConnect(CreateIPEndPoint($"{ip}:{port}"), new AsyncCallback(Connect), SocketInstance);
             }
             catch (Exception err)
             {
-                OnStatusUpdate(err.ToString());
+                OnStatusUpdate(ClientStatusEnums.ERROR);
+                throw err;
             }
             
         }
@@ -37,7 +32,7 @@ namespace MangalysProtocol.Network
             SocketInstance = (Socket)asyncResult.AsyncState;
             SocketInstance.EndConnect(asyncResult);
 
-            OnStatusUpdate("Connected");
+            OnStatusUpdate(ClientStatusEnums.ONLINE);
 
             SocketInstance.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, new AsyncCallback(Receive), SocketInstance);
         }
@@ -46,21 +41,22 @@ namespace MangalysProtocol.Network
         {
             Socket socket = (Socket)asyncResult.AsyncState;
 
-            int received = socket.EndReceive(asyncResult);
-            byte[] dataBuf = new byte[received];
-            Array.Copy(Buffer, dataBuf, received);
+            try
+            {
+                int received = socket.EndReceive(asyncResult);
+                byte[] dataBuf = new byte[received];
+                Array.Copy(Buffer, dataBuf, received);
 
-            OnReceive(dataBuf);
+                OnReceive(dataBuf);
 
-            socket.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, new AsyncCallback(Receive), socket);
-        }
-
-        public void Send(Message message)
-        {
-            var msg = Binary.Serialize(message);
-            Console.WriteLine($"[SEND][{message.GetType().Name}] " + msg.Length + " bytes");
-
-            SocketInstance.Send(msg);
+                socket.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, new AsyncCallback(Receive), socket);
+            }
+            catch (Exception)
+            {
+                socket.Close();
+                OnStatusUpdate(ClientStatusEnums.SERVER_OFFLINE);
+            }
+            
         }
     }
 }
