@@ -4,6 +4,7 @@ using MangalysServer.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Reflection;
 
 namespace MangalysServer.Network
@@ -30,11 +31,12 @@ namespace MangalysServer.Network
             }
         }
 
-        public static void Process(Client client, byte[] buffer) {
-            Console.WriteLine("[RCV] Buffer Length {0}.", buffer.Length);
-            MangalysProtocol.Message msg = (MangalysProtocol.Message)Binary.Deserialize(buffer);
+        public static void Process(Socket socket, byte[] buffer) {
+            var msg = (MangalysProtocol.Message)Binary.Deserialize(buffer);
 
             var message = Messages.FirstOrDefault(x => x.GetType().Name == msg.GetType().Name);
+
+            Console.WriteLine($"[RECEIVE][{msg.GetType().Name}] " + buffer.Length + " bytes");
 
             if (message == null)
             {
@@ -50,7 +52,8 @@ namespace MangalysServer.Network
                 }
                 else
                 {
-                    method.Invoke(Activator.CreateInstance(method.DeclaringType), new object[] { client, message });
+
+                    method.Invoke(Activator.CreateInstance(method.DeclaringType), new object[] { socket, msg });
                 }
             }
         }

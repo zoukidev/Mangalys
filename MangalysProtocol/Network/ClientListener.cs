@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MangalysProtocol.Network
@@ -20,6 +22,7 @@ namespace MangalysProtocol.Network
             try
             {
                 SocketInstance = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
                 SocketInstance.BeginConnect(CreateIPEndPoint($"{ip}:{port}"), new AsyncCallback(Connect), SocketInstance);
             }
             catch (Exception err)
@@ -41,24 +44,22 @@ namespace MangalysProtocol.Network
 
         private void Receive(IAsyncResult asyncResult)
         {
-            SocketInstance = (Socket)asyncResult.AsyncState;
-            int read = SocketInstance.EndReceive(asyncResult);
+            Socket socket = (Socket)asyncResult.AsyncState;
 
-            if (read > 0)
-            {
-                //string msg = Encoding.ASCII.GetString(Buffer);
+            int received = socket.EndReceive(asyncResult);
+            byte[] dataBuf = new byte[received];
+            Array.Copy(Buffer, dataBuf, received);
 
-                OnReceive(Buffer);
-                Buffer = new byte[2048];
+            OnReceive(dataBuf);
 
-                SocketInstance.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, new AsyncCallback(Receive), SocketInstance);
-            }
+            socket.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, new AsyncCallback(Receive), socket);
         }
 
         public void Send(Message message)
         {
             var msg = Binary.Serialize(message);
-            Console.WriteLine("Send " + msg.Length + " bytes");
+            Console.WriteLine($"[SEND][{message.GetType().Name}] " + msg.Length + " bytes");
+
             SocketInstance.Send(msg);
         }
     }
